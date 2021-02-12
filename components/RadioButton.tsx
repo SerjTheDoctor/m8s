@@ -14,13 +14,14 @@ type RadioButtonParamList = {
     onRemove?: () => void;
 }
 
-const RadioButton = ({ text, checked, onChangeChecked, onRemove }: RadioButtonParamList) => {
+const RadioButton = ({ text, checked, editable, removable, onChangeChecked, onChangeText, onRemove }: RadioButtonParamList) => {
+    const [ innerText, setInnerText ] = useState(text)
     const [ innerChecked, setInnerChecked ] = useState(checked)
-    let ellipsed = ''
-    
-    if (text.length > 25) {
-        text = text.substring(0, 22)
-        ellipsed = '...'
+    const [ editing, setEditing ] = useState(false)
+
+    if (innerText.length > 25 && !editing) {
+        const ellipsed = innerText.substring(0, 22) + '...'
+        setInnerText(ellipsed)
     }
 
     const handleChangeCheck = () => {
@@ -28,23 +29,40 @@ const RadioButton = ({ text, checked, onChangeChecked, onRemove }: RadioButtonPa
         setInnerChecked(!innerChecked)
     }
 
+    const handleFocus = () => {
+        setInnerText(text)
+        setEditing(true)
+    }
+
+    const handleBlur = () => {
+        setEditing(false)
+        onChangeText?.(innerText)
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.radio}>
                 <MaterialIcons.Button
                     name={innerChecked ? "radio-button-checked" : "radio-button-unchecked"}
-                    backgroundColor="inherit"
+                    backgroundColor="transparent"
+                    underlayColor='transparent'
                     onPress={handleChangeCheck}
                 />
-                <Text style={styles.text}>
-                    {text}{ellipsed}
-                </Text>
+                <TextInput 
+                    style={styles.text} 
+                    value={innerText}
+                    onFocus={handleFocus}
+                    onChangeText={setInnerText}
+                    onBlur={handleBlur}
+                />
             </View>
-            <FontAwesome.Button
-                name="close"
-                backgroundColor="inherit"
-                onPress={onRemove}
-            />
+            {removable && (
+                <FontAwesome.Button
+                    name="close"
+                    backgroundColor="inherit"
+                    onPress={onRemove}
+                />
+            )}
         </View>
     )
 }
@@ -64,6 +82,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 15,
+        color: 'white',
+        width: '70%'
     }
 })
 

@@ -50,12 +50,12 @@ const TabOneScreen = () => {
     setItem('')
   }
 
-  const changeCheckItem = (index: number, value: boolean) => {
+  const updateItem = (index: number, partial: any) => {
     const newTodoList = [...todoList]
     const deletedItem = newTodoList.splice(index, 1)[0] // splice returns array
     newTodoList.push({
       ...deletedItem,
-      checked: value,
+      ...partial
     })
     setTodoList(newTodoList)
   }
@@ -67,7 +67,7 @@ const TabOneScreen = () => {
     const newTodoList = [...todoList]
     newTodoList.splice(index, 1)
     setTodoList(newTodoList)
-  } 
+  }
 
   return (
     <View style={styles.container}>
@@ -93,7 +93,8 @@ const TabOneScreen = () => {
             text={item.text}
             checked={item.checked}
             removable={true}
-            onChangeChecked={value => changeCheckItem(index, value)}
+            onChangeChecked={value => updateItem(index, { checked: value })}
+            onChangeText={value => updateItem(index, { text: value })}
             onRemove={() => removeItem(index)}
           />
         )}
