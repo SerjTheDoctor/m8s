@@ -15,8 +15,8 @@ const initialTodoList: TodoItem[] = [
 ]
 
 const cmp = (a: TodoItem, b: TodoItem) => {
-  if (!a.checked && b.checked) return 1
-  if (a.checked && !b.checked) return -1
+  if (!a.checked && b.checked) return -1
+  if (a.checked && !b.checked) return 1
 
   return a.text.localeCompare(b.text)
 }
@@ -26,7 +26,7 @@ const TabOneScreen = () => {
   const [ todoList, setTodoList ] = useState<TodoItem[]>(initialTodoList)
 
   const handleAdd = () => {
-    let noSpaces = item.replaceAll(' ', '')
+    const noSpaces = item.replace(/ /g, '')
     if (noSpaces === '') {
       return
     }

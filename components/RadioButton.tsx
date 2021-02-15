@@ -7,14 +7,13 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons'
 type RadioButtonParamList = {
     text: string;
     checked?: boolean;
-    editable?: boolean;
     removable?: boolean;
     onChangeChecked?: (value: boolean) => void;
     onChangeText?: (text: string) => void;
     onRemove?: () => void;
 }
 
-const RadioButton = ({ text, checked, editable, removable, onChangeChecked, onChangeText, onRemove }: RadioButtonParamList) => {
+const RadioButton = ({ text, checked, removable, onChangeChecked, onChangeText, onRemove }: RadioButtonParamList) => {
     const [ innerText, setInnerText ] = useState(text)
     const [ innerChecked, setInnerChecked ] = useState(checked)
     const [ editing, setEditing ] = useState(false)
